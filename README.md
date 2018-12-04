@@ -155,7 +155,7 @@ class SomeController
 
 use ElMag\RQ\FormRequestQuery;
 
-class CustomFormRequest
+class CustomFormRequest extends FormRequest
 {
     use FormRequestQuery;
     
