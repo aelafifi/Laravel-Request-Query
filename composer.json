@@ -1,0 +1,13 @@
+{
+  "name": "el-mag/request-query",
+  "require": {
+    "php": ">=5.4.0",
+    "laravel/framework": ">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "ElMag\\RQ\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
