@@ -174,4 +174,14 @@ class RequestQuery
             throw new HttpException('Query not set.');
         }
     }
+
+    public function setFilterFields($filterFields)
+    {
+        $this->filterFields = $filterFields;
+    }
+
+    public function setSortFields($sortFields)
+    {
+        $this->sortFields = $sortFields;
+    }
 }

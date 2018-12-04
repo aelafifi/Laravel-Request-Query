@@ -7,13 +7,15 @@ use RuntimeException;
 trait FormRequestQuery
 {
     protected $requestQuery;
+    protected $sortFields = '*';
+    protected $filterFields = '*';
 
     public function setQuery($query = null)
     {
         if ($this->requestQuery !== null) {
             throw new RuntimeException('Query already set.');
         }
-        $this->requestQuery = new RequestQuery($this, $query);
+        $this->requestQuery = $this->getNewRequestQuery($query);
         return $this;
     }
 
@@ -46,6 +48,24 @@ trait FormRequestQuery
         if ($required && $this->requestQuery === null) {
             throw new RuntimeException('Query does not set.');
         }
-        return $this->requestQuery ?? new RequestQuery($this);
+        return $this->requestQuery ?? $this->getNewRequestQuery();
+    }
+
+    protected function getNewRequestQuery($query = null)
+    {
+        $requestQuery = new RequestQuery($this, $query);
+        $requestQuery->setSortFields($this->sortFields);
+        $requestQuery->setFilterFields($this->filterFields);
+        return $requestQuery;
+    }
+
+    public function setFilterFields($filterFields)
+    {
+        $this->filterFields = $filterFields;
+    }
+
+    public function setSortFields($sortFields)
+    {
+        $this->sortFields = $sortFields;
     }
 }
