@@ -35,6 +35,7 @@ class RequestQuery
             $page = $this->request->get('page', 1);
             $this->query->paginate($limit, ['*'], 'page', $page);
         }
+        return $this;
     }
 
     public function handleSort()
