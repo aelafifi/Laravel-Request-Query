@@ -138,7 +138,15 @@ class RequestQuery
                 }
 
                 $value = $this->normalizeValue($value);
-                $this->query->where($field, $operator, $value);
+
+                if (strpos($field, '.')) {
+                    $key_in_depth = $condition['key_in_depth'] ?? 'id';
+                    $this->query->whereHas($field, function ($query) use ($operator, $value, $key_in_depth) {
+                            return $query->where($key_in_depth, $operator, $value);
+                    });
+                } else {
+                    $this->query->where($field, $operator, $value);
+                }
             });
         }
         return $this;
