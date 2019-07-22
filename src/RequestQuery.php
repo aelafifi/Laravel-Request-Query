@@ -130,16 +130,26 @@ class RequestQuery
                 $value = $condition;
 
                 if (is_array($condition)) {
-                    if (!isset($condition['value'])) {
+                    /*if (!isset($condition['value'])) {
                         throw new RuntimeException('Condition `' . $field . '` requires a value.');
-                    }
+                    }*/
                     $operator = $condition['operator'] ?? '=';
-                    $value = $condition['value'];
+                    $value = @$condition['value'];
                 }
 
-                $value = $this->normalizeValue($value);
 
+                $value = $this->normalizeValue($value);
                 if (strpos($field, '.')) {
+                    /*
+                     * if you need to make query in first relation of table set first relation = second one
+                     * example: question.question will set in relation question
+                     * example2: question.category will set in relation question.category (not changed)
+                     * */
+                    $first_relation = substr($field, 0, strpos($field, '.'));
+                    $second_relation = substr($field, strpos($field, '.') + 1);
+                    if ($first_relation === $second_relation) {
+                        $field = $first_relation; // to get first relation
+                    }
                     $key_in_depth = $condition['key_in_depth'] ?? 'id';
                     $this->query->whereHas($field, function ($query) use ($operator, $value, $key_in_depth) {
                             return $query->where($key_in_depth, $operator, $value);
